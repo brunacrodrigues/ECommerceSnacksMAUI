@@ -9,7 +9,7 @@ namespace ECommerceSnacksMAUI.Services
     public class ApiService
     {
         private readonly HttpClient _httpClient;
-        public static readonly string _baseUrl = "https://www.appsnacks2025.somee.com/api/";
+        public static readonly string _baseUrl = "https://cdl6rcvr-7158.uks1.devtunnels.ms/";
         private readonly ILogger<ApiService> _logger;
         JsonSerializerOptions _serializerOptions;
 

@@ -1,4 +1,5 @@
-﻿using ECommerceSnacksMAUI.Pages;
+﻿using ECommerceSnacksMAUI.Models.Validators;
+using ECommerceSnacksMAUI.Pages;
 using ECommerceSnacksMAUI.Services;
 
 namespace ECommerceSnacksMAUI
@@ -6,12 +7,14 @@ namespace ECommerceSnacksMAUI
     public partial class App : Application
     {
         private ApiService _apiService;
+        private IValidator _validator;
 
-        public App(ApiService apiService)
+        public App(ApiService apiService, IValidator validator)
         {
-            InitializeComponent();          
+            InitializeComponent();
             _apiService = apiService;
-            MainPage = new NavigationPage(new RegisterPage(_apiService));
+            _validator = validator; 
+            MainPage = new NavigationPage(new RegisterPage(_apiService, _validator));
         }
     }
 }
