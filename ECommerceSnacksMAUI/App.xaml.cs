@@ -1,12 +1,17 @@
-﻿namespace ECommerceSnacksMAUI
+﻿using ECommerceSnacksMAUI.Pages;
+using ECommerceSnacksMAUI.Services;
+
+namespace ECommerceSnacksMAUI
 {
     public partial class App : Application
     {
-        public App()
-        {
-            InitializeComponent();
+        private ApiService _apiService;
 
-            MainPage = new AppShell();
+        public App(ApiService apiService)
+        {
+            InitializeComponent();          
+            _apiService = apiService;
+            MainPage = new NavigationPage(new RegisterPage(_apiService));
         }
     }
 }

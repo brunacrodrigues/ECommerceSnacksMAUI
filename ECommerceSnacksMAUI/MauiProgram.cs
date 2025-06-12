@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using ECommerceSnacksMAUI.Services;
+using Microsoft.Extensions.Logging;
 
 namespace ECommerceSnacksMAUI
 {
@@ -19,6 +20,7 @@ namespace ECommerceSnacksMAUI
     		builder.Logging.AddDebug();
 #endif
             builder.Services.AddHttpClient();
+            builder.Services.AddSingleton<ApiService>();
             return builder.Build();
         }
     }
