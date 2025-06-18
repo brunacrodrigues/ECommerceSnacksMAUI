@@ -105,7 +105,8 @@ namespace ECommerceSnacksMAUI.Services
 
         private async Task<HttpResponseMessage> PostRequest(string uri, HttpContent content)
         {
-            var enderecoUrl = _baseUrl + uri;
+            var enderecoUrl = AppConfig.BaseUrl + uri; 
+            
             try
             {
                 var result = await _httpClient.PostAsync(enderecoUrl, content);
@@ -193,5 +194,34 @@ namespace ECommerceSnacksMAUI.Services
             string endpoint = $"api/products/{productId}";
             return await GetAsync<Product>(endpoint);
         }
+
+        public async Task<ApiResponse<bool>> AddItemToCart(ShoppingCart shoppingCart)
+        {
+            try
+            {
+                var json = JsonSerializer.Serialize(shoppingCart, _serializerOptions);
+                var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+                var response = await PostRequest("api/ShoppingCartItems", content);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _logger.LogError($"HTTP Request error: {response.StatusCode}");
+                    return new ApiResponse<bool>
+                    {
+                        ErrorMessage = $"HTTP Request error: {response.StatusCode}"
+                    };
+                }
+
+                return new ApiResponse<bool> { Data = true };
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Error adding item to cart: {ex.Message}");
+                return new ApiResponse<bool> { ErrorMessage = ex.Message };
+            }
+        }
+
+
     }
 }
