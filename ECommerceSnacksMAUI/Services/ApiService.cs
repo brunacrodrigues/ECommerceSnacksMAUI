@@ -187,5 +187,11 @@ namespace ECommerceSnacksMAUI.Services
                 _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
         }
+
+        public async Task<(Product? productDetails, string errorMessage)> GetProductDetails(int productId)
+        {
+            string endpoint = $"api/products/{productId}";
+            return await GetAsync<Product>(endpoint);
+        }
     }
 }
