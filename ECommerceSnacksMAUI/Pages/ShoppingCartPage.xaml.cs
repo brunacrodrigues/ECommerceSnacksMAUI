@@ -47,9 +47,20 @@ public partial class ShoppingCartPage : ContentPage
         }
     }
 
-    private void BtnDelete_Clicked(object sender, EventArgs e)
+    private async void BtnDelete_Clicked(object sender, EventArgs e)
     {
+        if (sender is ImageButton button && button.BindingContext is ShoppingCartItem cartItem)
+        {
+            bool response = await DisplayAlert("Confirmation",
+                "Are you sure you want to delete this item from the cart?", "Yes", "No");
 
+            if (response)
+            {
+                ShoppingCartItems.Remove(cartItem);
+                UpdateTotalPrice();
+                await _apiService.UpdateShoppingCartItemQuantity(cartItem.ProductId, "apagar");
+            }
+        }
     }
 
     private void BtnEditAddress_Clicked(object sender, EventArgs e)
