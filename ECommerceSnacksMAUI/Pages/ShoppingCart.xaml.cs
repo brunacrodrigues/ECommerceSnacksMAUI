@@ -22,14 +22,28 @@ public partial class ShoppingCartPage : ContentPage
         _validator = validator;
     }
 
-    private void BtnDecrease_Clicked(object sender, EventArgs e)
+    private async void BtnDecrease_Clicked(object sender, EventArgs e)
     {
-
+        if (sender is Button button && button.BindingContext is ShoppingCartItem cartItem)
+        {
+            if (cartItem.Quantity == 1) return;
+            else
+            {
+                cartItem.Quantity--;
+                UpdateTotalPrice();
+                await _apiService.UpdateShoppingCartItemQuantity(cartItem.ProductId, "diminuir");
+            }
+        }
     }
 
-    private void BtnIncrease_Clicked(object sender, EventArgs e)
+    private async void BtnIncrease_Clicked(object sender, EventArgs e)
     {
-
+        if (sender is Button button && button.BindingContext is ShoppingCartItem cartItem)
+        {
+            cartItem.Quantity++;
+            UpdateTotalPrice();
+            await _apiService.UpdateShoppingCartItemQuantity(cartItem.ProductId, "aumentar");
+        }
     }
 
     private void BtnDelete_Clicked(object sender, EventArgs e)
@@ -39,7 +53,7 @@ public partial class ShoppingCartPage : ContentPage
 
     private void BtnEditAddress_Clicked(object sender, EventArgs e)
     {
-
+        Navigation.PushAsync(new AddressPage());
     }
 
     private void TapConfirmOrder_Tapped(object sender, TappedEventArgs e)
@@ -50,6 +64,22 @@ public partial class ShoppingCartPage : ContentPage
     {
         base.OnAppearing();
         await GetShoppingCartItems();
+
+        bool savedAddress = Preferences.ContainsKey("address");
+
+
+        if (savedAddress)
+        {
+            string name = Preferences.Get("name", string.Empty);
+            string address = Preferences.Get("address", string.Empty);
+            string phoneNumber = Preferences.Get("phonenumber", string.Empty);
+
+            LblAddress.Text = $"{name}\n{address} \n{phoneNumber}";
+        }
+        else
+        {
+            LblAddress.Text = "Please provide your address.";
+        }
     }
 
     private async Task<bool> GetShoppingCartItems()
@@ -79,7 +109,7 @@ public partial class ShoppingCartPage : ContentPage
                 ShoppingCartItems.Add(item);
             }
 
-            CvCart.ItemsSource = shoopingCartItems;
+            CvCart.ItemsSource = ShoppingCartItems;
             UpdateTotalPrice(); // Atualizar o preco total ap?s atualizar os itens do carrinho
 
             if (!ShoppingCartItems.Any())
@@ -99,8 +129,8 @@ public partial class ShoppingCartPage : ContentPage
     {
         try
         {
-            //var totalPrice = ShoppingCartItems.Sum(item => item.UnitPrice * item.Quantity); // TODO fix later?
-            var totalPrice = ShoppingCartItems.Sum(item => item.Total);
+            var totalPrice = ShoppingCartItems.Sum(item => item.UnitPrice * item.Quantity); // TODO fix later?
+            //var totalPrice = ShoppingCartItems.Sum(item => item.Total);
             LblTotalPrice.Text = totalPrice.ToString();
         }
         catch (Exception ex)

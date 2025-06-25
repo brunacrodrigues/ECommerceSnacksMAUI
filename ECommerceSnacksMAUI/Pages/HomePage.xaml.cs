@@ -22,6 +22,9 @@ public partial class HomePage : ContentPage
     protected override async void OnAppearing()
     {
         base.OnAppearing();
+
+        //Preferences.Remove("accesstoken");
+
         await GetCategoriesList();
         await GetBestSellers();
         await GetPopular();

@@ -10,8 +10,8 @@ namespace ECommerceSnacksMAUI.Services
     public class ApiService
     {
         private readonly HttpClient _httpClient;
-        //public static readonly string _baseUrl = "https://cdl6rcvr-7158.uks1.devtunnels.ms/";
-        public static readonly string _baseUrl = "https://www.appsnacks2025.somee.com/";
+        public static readonly string _baseUrl = "https://1f2b2zl7-7158.uks1.devtunnels.ms/";
+        ////public static readonly string _baseUrl = "https://www.appsnacks2025.somee.com/";
         private readonly ILogger<ApiService> _logger;
         JsonSerializerOptions _serializerOptions;
 
@@ -228,7 +228,58 @@ namespace ECommerceSnacksMAUI.Services
             return await GetAsync<List<ShoppingCartItem>>(endpoint);
         }
 
+        public async Task<(bool Data, string? ErrorMessage)> UpdateShoppingCartItemQuantity(int productId, string action)
+        {
+            try
+            {
+                var content = new StringContent(string.Empty, Encoding.UTF8, "application/json");
+                var response = await PutRequest($"api/ShoppingCartItems?productId={productId}&action={action}", content);
+                if (response.IsSuccessStatusCode)
+                {
+                    return (true, null);
+                }
+                else
+                {
+                    if (response.StatusCode == HttpStatusCode.Unauthorized)
+                    {
+                        string errorMessage = "Unauthorized";
+                        _logger.LogWarning(errorMessage);
+                        return (false, errorMessage);
+                    }
+                    string generalErrorMessage = $"Request error: {response.ReasonPhrase}";
+                    _logger.LogError(generalErrorMessage);
+                    return (false, generalErrorMessage);
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                string errorMessage = $"HTTP request error: {ex.Message}";
+                _logger.LogError(ex, errorMessage);
+                return (false, errorMessage);
+            }
+            catch (Exception ex)
+            {
+                string errorMessage = $"Unexpected error: {ex.Message}";
+                _logger.LogError(ex, errorMessage);
+                return (false, errorMessage);
+            }
+        }
 
+        private async Task<HttpResponseMessage> PutRequest(string uri, HttpContent content)
+        {
+            var urlAddress = AppConfig.BaseUrl + uri;
+            try
+            {
+                AddAuthorizationHeader();
+                var result = await _httpClient.PutAsync(urlAddress, content);
+                return result;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Erro sending PUT request to {uri}: {ex.Message}");
+                return new HttpResponseMessage(HttpStatusCode.BadRequest);
+            }
+        }
 
     }
 }
