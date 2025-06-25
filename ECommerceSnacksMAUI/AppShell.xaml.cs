@@ -20,7 +20,7 @@ namespace ECommerceSnacksMAUI
         private void ConfigureShell()
         {
             var homePage = new HomePage(_apiService, _validator);
-            var shoppingCartPage = new ShoppingCartPage();
+            var shoppingCartPage = new ShoppingCartPage(_apiService, _validator);
             var favouritesPage = new FavouritesPage();
             var profilePage = new ProfilePage();
 

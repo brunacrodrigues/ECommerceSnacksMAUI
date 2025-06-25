@@ -1,4 +1,6 @@
-﻿namespace ECommerceSnacksMAUI
+﻿using static System.Net.WebRequestMethods;
+
+namespace ECommerceSnacksMAUI
 {
     public static class AppConfig
     {

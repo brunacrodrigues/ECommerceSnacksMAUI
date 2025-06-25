@@ -222,6 +222,13 @@ namespace ECommerceSnacksMAUI.Services
             }
         }
 
+        public async Task<(List<ShoppingCartItem>? ShoppingCartItems, string? ErrorMessage)> GetShoppingCartItems(int userId)
+        {
+            var endpoint = $"api/ShoppingCartItems/{userId}";
+            return await GetAsync<List<ShoppingCartItem>>(endpoint);
+        }
+
+
 
     }
 }
