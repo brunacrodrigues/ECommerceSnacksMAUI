@@ -10,6 +10,7 @@ public partial class ShoppingCartPage : ContentPage
     private readonly ApiService _apiService;
     private readonly IValidator _validator;
     private bool _loginPageDisplayed = false;
+    private bool _isNavigatingToEmptyCartPage = false;
 
     private ObservableCollection<ShoppingCartItem> ShoppingCartItems = new ObservableCollection<ShoppingCartItem>();
 
@@ -56,15 +57,68 @@ public partial class ShoppingCartPage : ContentPage
         Navigation.PushAsync(new AddressPage());
     }
 
-    private void TapConfirmOrder_Tapped(object sender, TappedEventArgs e)
+    private async void TapConfirmOrder_Tapped(object sender, TappedEventArgs e)
     {
+        if (ShoppingCartItems == null || !ShoppingCartItems.Any())
+        {
+            await DisplayAlert("Info", "Your cart is empty or the order has already been confirmed.", "OK");
+            return;
+        }
 
+        var order = new Order()
+        {
+            Address = LblAddress.Text,
+            UserId = Preferences.Get("userid", 0),
+            Total = Convert.ToDecimal(LblTotalPrice.Text)
+        };
+
+        var response = await _apiService.ConfirmOrder(order);
+
+        if (response.HasError)
+        {
+            if (response.ErrorMessage == "Unauthorized")
+            {
+                // Redirecionar para a p gina de login
+                await DisplayLoginPage();
+                return;
+            }
+            await DisplayAlert("Oops !!!", $"Something went wrong: {response.ErrorMessage}", "Cancel");
+            return;
+        }
+
+        ShoppingCartItems.Clear();
+        LblAddress.Text = "Please provide your address.";
+        LblTotalPrice.Text = "0.00";
+
+        await Navigation.PushAsync(new OrderConfirmedPage());
     }
     protected override async void OnAppearing()
     {
         base.OnAppearing();
-        await GetShoppingCartItems();
 
+        if (IsNavigatingToEmptyCartPage()) return;
+
+        bool hasItems = await GetShoppingCartItems();
+
+        if (hasItems)
+        {
+            ShowAddress();
+        }
+        else
+        {
+            await NavigateToEmptyCartPage();
+        }
+    }
+
+    private async Task NavigateToEmptyCartPage()
+    {
+        LblAddress.Text = string.Empty;
+        _isNavigatingToEmptyCartPage = true;
+        await Navigation.PushAsync(new EmptyCartPage());
+    }
+
+    private void ShowAddress()
+    {
         bool savedAddress = Preferences.ContainsKey("address");
 
 
@@ -80,6 +134,16 @@ public partial class ShoppingCartPage : ContentPage
         {
             LblAddress.Text = "Please provide your address.";
         }
+    }
+
+    private bool IsNavigatingToEmptyCartPage()
+    {
+        if (_isNavigatingToEmptyCartPage)
+        {
+            _isNavigatingToEmptyCartPage = false;
+            return true;
+        }
+        return false;
     }
 
     private async Task<bool> GetShoppingCartItems()
@@ -129,8 +193,7 @@ public partial class ShoppingCartPage : ContentPage
     {
         try
         {
-            var totalPrice = ShoppingCartItems.Sum(item => item.UnitPrice * item.Quantity); // TODO fix later?
-            //var totalPrice = ShoppingCartItems.Sum(item => item.Total);
+            var totalPrice = ShoppingCartItems.Sum(item => item.UnitPrice * item.Quantity);
             LblTotalPrice.Text = totalPrice.ToString();
         }
         catch (Exception ex)

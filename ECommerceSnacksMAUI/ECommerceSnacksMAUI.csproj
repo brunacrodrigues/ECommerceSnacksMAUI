@@ -64,13 +64,22 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Pages\ShoppingCart.xaml.cs">
-	    <DependentUpon>ShoppingCart.xaml</DependentUpon>
+	  <Compile Update="Pages\OrderConfirmedPage.xaml.cs">
+	    <DependentUpon>OrderConfirmedPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Pages\ShoppingCartPage.xaml.cs">
+	    <DependentUpon>ShoppingCartPage.xaml</DependentUpon>
 	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
 	  <MauiXaml Update="Pages\AddressPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\EmptyCartPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\OrderConfirmedPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\FavouritesPage.xaml">
@@ -85,7 +94,7 @@
 	  <MauiXaml Update="Pages\ProfilePage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Pages\ShoppingCart.xaml">
+	  <MauiXaml Update="Pages\ShoppingCartPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\HomePage.xaml">

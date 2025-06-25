@@ -9,6 +9,7 @@ public partial class HomePage : ContentPage
     private readonly ApiService _apiService;
     private readonly IValidator _validator;
     private bool _loginPageDisplayed = false;
+    private bool _isDataLoaded = false;
 
     public HomePage(ApiService apiService, IValidator validator)
     {
@@ -24,12 +25,21 @@ public partial class HomePage : ContentPage
         base.OnAppearing();
 
         //Preferences.Remove("accesstoken");
-
-        await GetCategoriesList();
-        await GetBestSellers();
-        await GetPopular();
+        if (!_isDataLoaded)
+        {
+            await LoadDataAsync();
+            _isDataLoaded = true;
+        }
     }
 
+    private async Task LoadDataAsync()
+    {
+        var categoriesTask = GetCategoriesList();
+        var bestSellersTask = GetBestSellers();
+        var popularTask = GetPopular();
+
+        await Task.WhenAll(categoriesTask, bestSellersTask, popularTask);
+    }
 
     private async Task<IEnumerable<Category>> GetCategoriesList()
     {
