@@ -21,7 +21,7 @@ namespace ECommerceSnacksMAUI
         {
             var homePage = new HomePage(_apiService, _validator);
             var shoppingCartPage = new ShoppingCartPage(_apiService, _validator);
-            var favouritesPage = new FavouritesPage();
+            var favoritesPage = new FavoritesPage(_apiService, _validator);
             var profilePage = new ProfilePage();
 
             Items.Add(new TabBar
@@ -30,7 +30,7 @@ namespace ECommerceSnacksMAUI
             {
                 new ShellContent { Title = "Home",Icon = "home",Content = homePage  },
                 new ShellContent { Title = "Cart", Icon = "cart",Content = shoppingCartPage },
-                new ShellContent { Title = "Favourites",Icon = "heart",Content = favouritesPage },
+                new ShellContent { Title = "Favorites",Icon = "heart",Content = favoritesPage },
                 new ShellContent { Title = "Profile",Icon = "profile",Content = profilePage }
             }
             });

@@ -24,8 +24,8 @@
             <ShellContent ContentTemplate="{DataTemplate pages:ShoppingCartPage}" />
         </Tab>
 
-        <Tab Title="Favourites" Icon="heart.png">
-            <ShellContent ContentTemplate="{DataTemplate pages:FavouritesPage}" />
+        <Tab Title="favorites" Icon="heart.png">
+            <ShellContent ContentTemplate="{DataTemplate pages:favoritesPage}" />
         </Tab>
         <Tab Title="Profile" Icon="profile.png">
             <ShellContent ContentTemplate="{DataTemplate pages:ProfilePage}" />
