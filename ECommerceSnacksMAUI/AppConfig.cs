@@ -9,5 +9,7 @@ namespace ECommerceSnacksMAUI
 
         //public static readonly string BaseUrl = "https://www.appsnacks2025.somee.com/";
         public static readonly string HomePageTitlte = "Cosa Nostra";
+
+        public static readonly string DefaultProfileImage = "Resources/Images/user1.png";
     }
 }

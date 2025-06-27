@@ -7,7 +7,7 @@ namespace ECommerceSnacksMAUI.Models
     {
         public int Id { get; set; }
 
-        public decimal UnitPrice { get; set; }
+        public decimal UnitPrice { get; set; } // TODO change to Price
 
         public decimal Total {  get; set; }
 
