@@ -1,4 +1,5 @@
-﻿using ECommerceSnacksMAUI.Models.Validators;
+﻿using CommunityToolkit.Maui;
+using ECommerceSnacksMAUI.Models.Validators;
 using ECommerceSnacksMAUI.Services;
 using Microsoft.Extensions.Logging;
 
@@ -11,6 +12,7 @@ namespace ECommerceSnacksMAUI
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
