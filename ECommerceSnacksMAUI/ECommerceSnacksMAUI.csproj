@@ -67,6 +67,9 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Compile Update="Pages\FavoritesPage.xaml.cs">
+	    <DependentUpon>FavoritesPage.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Pages\OrderConfirmedPage.xaml.cs">
 	    <DependentUpon>OrderConfirmedPage.xaml</DependentUpon>
 	  </Compile>
