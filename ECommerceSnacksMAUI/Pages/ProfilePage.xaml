@@ -44,7 +44,7 @@
 
             <HorizontalStackLayout Spacing="10">
                 <Image Source="perfilconfig" HeightRequest="30" />
-                <Label Text="Minha Conta"
+                <Label Text="My Account"
                        FontAttributes="Bold"
                        FontSize="Small" />
                 <HorizontalStackLayout.GestureRecognizers>

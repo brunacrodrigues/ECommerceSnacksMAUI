@@ -310,7 +310,7 @@ namespace ECommerceSnacksMAUI.Services
 
         public async Task<(ProfileImage? ProfileImage, string? ErrorMessage)> GetUserProfileImage()
         {
-            string endpoint = "api/user/UserProfileImage";
+            string endpoint = "api/users/UserProfileImage";
             return await GetAsync<ProfileImage>(endpoint);
         }
 
@@ -320,7 +320,7 @@ namespace ECommerceSnacksMAUI.Services
             {
                 var content = new MultipartFormDataContent();
                 content.Add(new ByteArrayContent(imageArray), "image", "image.jpg");
-                var response = await PostRequest("api/user/uploadimage", content);
+                var response = await PostRequest("api/users/uploadimage", content);
 
                 if (!response.IsSuccessStatusCode)
                 {
@@ -339,6 +339,22 @@ namespace ECommerceSnacksMAUI.Services
                 return new ApiResponse<bool> { ErrorMessage = ex.Message };
             }
         }
+
+        public async Task<(List<OrderByUser>?, string? ErrorMessage)> GetOrdersByUser(int userId)
+        {
+
+            string endpoint = $"api/orders/GetOrdersByUser/{userId}";
+
+            return await GetAsync<List<OrderByUser>>(endpoint);
+        }
+
+        public async Task<(List<OrderDetail>?, string? ErrorMessage)> GetOrderDetails(int orderId)
+        {
+            string endpoint = $"api/orders/GetOrderDetails/{orderId}";
+
+            return await GetAsync<List<OrderDetail>>(endpoint);
+        }
+
 
     }
 }
